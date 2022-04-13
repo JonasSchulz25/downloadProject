@@ -1,5 +1,5 @@
 # Url
- Download project - Desafio Tecnioco
+ Download project - Desafio Tecnico
 
 
 ### 📋 Pré-requisitos
