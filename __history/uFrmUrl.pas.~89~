@@ -25,7 +25,8 @@ uses
   IdSSL,
   IdSSLOpenSSL,
   utDownload,
-  uDmConexao;
+  uDmConexao,
+  uFrmLista;
 
 type
   TTipoEvento = (teBaixando, teCancelado, teParado);
@@ -40,11 +41,13 @@ type
     btnFechar: TButton;
     pgBaixar: TProgressBar;
     lblStatus: TLabel;
+    btnHistorico: TButton;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnFecharClick(Sender: TObject);
     procedure btnBaixarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
+    procedure btnHistoricoClick(Sender: TObject);
   private
     { Private declarations }
     procedure SalvarArquivo;
@@ -95,7 +98,6 @@ begin
     ShowMessage('Nenhuma URL informada, Verifique!');
     edtUrl.SetFocus;
   end;
-
 end;
 
 procedure TFrmPrincipal.btnCancelarClick(Sender: TObject);
@@ -109,6 +111,15 @@ end;
 procedure TFrmPrincipal.btnFecharClick(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TFrmPrincipal.btnHistoricoClick(Sender: TObject);
+begin
+  if not Assigned(frmLista) then
+  begin
+    frmLista := TfrmLista.Create(nil);
+  end;
+  frmLista.Show;
 end;
 
 procedure TFrmPrincipal.EventoBaixando;
@@ -204,7 +215,8 @@ end;
 function TFrmPrincipal.ValidarDownloadAndamento: Boolean;
 begin
   Result := False;
-  if (vIdHttp.BytesToTransfer > 0) and (MessageDlg('Download em andamento, deseja cancelar?', mtWarning, mbYesNo, 0) = mrYes) then
+  if (vIdHttp.BytesToTransfer > 0) and (chkFechar.Checked or (MessageDlg('Download em andamento, deseja cancelar?', mtWarning, mbYesNo,
+    0) = mrYes)) then
   begin
     vIdHttp.Disconnect;
     GravarDownload(teCancelado);

@@ -107,4 +107,8 @@ object FrmPrincipal: TFrmPrincipal
       OnClick = btnHistoricoClick
     end
   end
+  object SaveDialog: TSaveDialog
+    Left = 432
+    Top = 56
+  end
 end

@@ -42,6 +42,7 @@ type
     pgBaixar: TProgressBar;
     lblStatus: TLabel;
     btnHistorico: TButton;
+    SaveDialog: TSaveDialog;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnFecharClick(Sender: TObject);
     procedure btnBaixarClick(Sender: TObject);
@@ -76,22 +77,25 @@ procedure TFrmPrincipal.btnBaixarClick(Sender: TObject);
 begin
   if edtUrl.Text <> EmptyStr then
   begin
-
-    TratarBotoes(teBaixando);
-    pgBaixar.Position := 0;
-    vIdHttp.ProgressBar := pgBaixar;
-    FdataInicio := Now;
-    TThread.CreateAnonymousThread(
-      procedure
-      begin
-        vIdHttp.DownloadFile(edtUrl.Text, 'C:\desenvolvimento\teste\teste.zip');
-        if chkFechar.Checked then
+    SaveDialog.Filter := '|*' + ExtractFileExt(edtUrl.Text);
+    if SaveDialog.Execute then
+    begin
+      TratarBotoes(teBaixando);
+      pgBaixar.Position := 0;
+      vIdHttp.ProgressBar := pgBaixar;
+      FdataInicio := Now;
+      TThread.CreateAnonymousThread(
+        procedure
         begin
-          Close;
-        end;
-        FDataFim := Now;
-        TratarBotoes(teParado);
-      end).Start;
+          vIdHttp.DownloadFile(edtUrl.Text, SaveDialog.FileName);
+          if chkFechar.Checked then
+          begin
+            Close;
+          end;
+          FDataFim := Now;
+          TratarBotoes(teParado);
+        end).Start;
+    end;
   end
   else
   begin
@@ -127,7 +131,7 @@ begin
   lblStatus.Caption := 'Download Em andamento';
   btnCancelar.Enabled := True;
   btnBaixar.Enabled := False;
-  pgBaixar.Visible := False;
+  pgBaixar.Visible := True;
 end;
 
 procedure TFrmPrincipal.EventoCancelado;
@@ -215,7 +219,8 @@ end;
 function TFrmPrincipal.ValidarDownloadAndamento: Boolean;
 begin
   Result := False;
-  if (vIdHttp.BytesToTransfer > 0) and (MessageDlg('Download em andamento, deseja cancelar?', mtWarning, mbYesNo, 0) = mrYes) then
+  if (vIdHttp.BytesToTransfer > 0) and (chkFechar.Checked or (MessageDlg('Download em andamento, deseja cancelar?', mtWarning, mbYesNo,
+    0) = mrYes)) then
   begin
     vIdHttp.Disconnect;
     GravarDownload(teCancelado);

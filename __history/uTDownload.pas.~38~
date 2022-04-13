@@ -7,6 +7,7 @@ uses
   FireDAC.DApt,
   System.SysUtils,
   Data.DB,
+  Datasnap.DBClient,
   Variants,
   uDmConexao;
 
@@ -22,7 +23,7 @@ type
   public
     procedure Gravar;
     procedure Alterar;
-    procedure Carregar;
+    procedure Carregar(pCds: TClientDataSet);
   published
     property id: integer read FId write FId;
     property url: string read FUrl write FUrl;
@@ -43,7 +44,7 @@ begin
   try
     try
       vQry := TFDQuery.Create(nil);
-      vQry.Connection := dmConexao.FDConnection1;
+      vQry.Connection := dmConexao.FDConnection;
       vQry.SQL.Add(' UPDATE DOWNLOAD');
       vQry.SQL.Add(' SET(');
       vQry.SQL.Add(' ID = :ID , URL = :URL, DATA_INICIO = :DATA_INICIO, DATA_FIM= :DATA_FIM, STATUS = :STATUS)');
@@ -62,14 +63,14 @@ begin
   end;
 end;
 
-procedure tDownload.Carregar;
+procedure tDownload.Carregar(pCds: TClientDataSet);
 var
   vQry: TFDQuery;
 begin
   vQry := TFDQuery.Create(nil);
   try
     try
-      vQry.Connection := dmConexao.FDConnection1;
+      vQry.Connection := dmConexao.FDConnection;
       vQry.SQL.Add(' SELECT ID, URL, DATA_INICIO, DATA_FIM, STATUS');
       vQry.SQL.Add(' FROM DOWNLOAD');
       vQry.SQL.Add(' WHERE (1=1) ');
@@ -81,8 +82,12 @@ begin
         vQry.First;
         while not vQry.Eof do
         begin
-
-
+          pCds.Append;
+          pCds.FieldByName('DATA_INICIO').AsDateTime := vQry.FieldByName('DATA_INICIO').AsDateTime;
+          pCds.FieldByName('DATA_FIM').AsDateTime := vQry.FieldByName('DATA_FIM').AsDateTime;
+          pCds.FieldByName('URL').AsString := vQry.FieldByName('URL').AsString;
+          pCds.FieldByName('STATUS').AsString := vQry.FieldByName('STATUS').AsString;
+          pCds.Post;
           vQry.Next;
         end;
       end;
@@ -111,7 +116,7 @@ begin
       vQry.SQL.Add(' :ID, :URL, :DATA_INICIO, :DATA_FIM, :STATUS)');
       PopularParametros(vQry);
 
-      vQry.Open;
+      vQry.ExecSQL;
     except
       on E: Exception do
       begin

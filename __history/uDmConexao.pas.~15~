@@ -19,6 +19,7 @@ uses
   FireDAC.Stan.ExprFuncs,
   FireDAC.VCLUI.Wait,
   Data.DB,
+  Forms,
   FireDAC.Comp.Client,
   FireDAC.Stan.Param,
   FireDAC.DatS,
@@ -27,10 +28,13 @@ uses
   FireDAC.Comp.DataSet;
 
 type
-  TdmConexao = class(TDataModule)
-    FDConnection1: TFDConnection;
+  Tdmconexao = class(TDataModule)
+    FDConnection: TFDConnection;
     FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink;
     FDSQLiteBackup1: TFDSQLiteBackup;
+    fdq: TFDQuery;
+    procedure FDConnectionBeforeCommit(Sender: TObject);
+    procedure FDConnectionAfterConnect(Sender: TObject);
   private
     { Private declarations }
   public
@@ -38,12 +42,22 @@ type
   end;
 
 var
-  fd: Tfd;
+  dmconexao: Tdmconexao;
 
 implementation
 
 { %CLASSGROUP 'Vcl.Controls.TControl' }
 
 {$R *.dfm}
+
+procedure Tdmconexao.FDConnectionAfterConnect(Sender: TObject);
+begin
+  fdq.OpenOrExecute;
+end;
+
+procedure Tdmconexao.FDConnectionBeforeCommit(Sender: TObject);
+begin
+  FDConnection.Params.Database := ExtractFilePath(Application.ExeName) + '\banco.sdb';
+end;
 
 end.

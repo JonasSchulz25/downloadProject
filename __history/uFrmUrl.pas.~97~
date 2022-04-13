@@ -25,7 +25,8 @@ uses
   IdSSL,
   IdSSLOpenSSL,
   utDownload,
-  uDmConexao;
+  uDmConexao,
+  uFrmLista;
 
 type
   TTipoEvento = (teBaixando, teCancelado, teParado);
@@ -40,11 +41,14 @@ type
     btnFechar: TButton;
     pgBaixar: TProgressBar;
     lblStatus: TLabel;
+    btnHistorico: TButton;
+    SaveDialog: TSaveDialog;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnFecharClick(Sender: TObject);
     procedure btnBaixarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
+    procedure btnHistoricoClick(Sender: TObject);
   private
     { Private declarations }
     procedure SalvarArquivo;
@@ -73,28 +77,31 @@ procedure TFrmPrincipal.btnBaixarClick(Sender: TObject);
 begin
   if edtUrl.Text <> EmptyStr then
   begin
-
-    TratarBotoes(teBaixando);
-    pgBaixar.Position := 0;
-    vIdHttp.ProgressBar := pgBaixar;
-    FdataInicio := Now;
-    TThread.CreateAnonymousThread(
-      procedure
-      begin
-        vIdHttp.DownloadFile(edtUrl.Text, 'C:\desenvolvimento\teste\teste.zip');
-        if chkFechar.Checked then
+    SaveDialog.Filter := '|*' + ExtractFileExt(edtUrl.Text);
+    if SaveDialog.Execute then
+    begin
+      TratarBotoes(teBaixando);
+      pgBaixar.Position := 0;
+      vIdHttp.ProgressBar := pgBaixar;
+      FdataInicio := Now;
+      TThread.CreateAnonymousThread(
+        procedure
         begin
-          Close;
-        end;
-      end).Start;
+          vIdHttp.DownloadFile(edtUrl.Text, 'C:\desenvolvimento\teste\teste.zip');
+          if chkFechar.Checked then
+          begin
+            Close;
+          end;
+          FDataFim := Now;
+          TratarBotoes(teParado);
+        end).Start;
+    end;
   end
   else
   begin
     ShowMessage('Nenhuma URL informada, Verifique!');
     edtUrl.SetFocus;
   end;
-  FDataFim := Now;
-  TratarBotoes(teParado);
 end;
 
 procedure TFrmPrincipal.btnCancelarClick(Sender: TObject);
@@ -110,12 +117,21 @@ begin
   Close;
 end;
 
+procedure TFrmPrincipal.btnHistoricoClick(Sender: TObject);
+begin
+  if not Assigned(frmLista) then
+  begin
+    frmLista := TfrmLista.Create(nil);
+  end;
+  frmLista.Show;
+end;
+
 procedure TFrmPrincipal.EventoBaixando;
 begin
   lblStatus.Caption := 'Download Em andamento';
   btnCancelar.Enabled := True;
   btnBaixar.Enabled := False;
-  pgBaixar.Visible := False;
+  pgBaixar.Visible := True;
 end;
 
 procedure TFrmPrincipal.EventoCancelado;
@@ -203,7 +219,8 @@ end;
 function TFrmPrincipal.ValidarDownloadAndamento: Boolean;
 begin
   Result := False;
-  if (vIdHttp.BytesToTransfer > 0) and (MessageDlg('Download em andamento, deseja cancelar?', mtWarning, mbYesNo, 0) = mrYes) then
+  if (vIdHttp.BytesToTransfer > 0) and (chkFechar.Checked or (MessageDlg('Download em andamento, deseja cancelar?', mtWarning, mbYesNo,
+    0) = mrYes)) then
   begin
     vIdHttp.Disconnect;
     GravarDownload(teCancelado);

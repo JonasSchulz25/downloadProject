@@ -7,7 +7,7 @@ object dmconexao: Tdmconexao
       'DriverID=SQLite')
     LoginPrompt = False
     AfterConnect = FDConnectionAfterConnect
-    BeforeConnect = FDConnectionBeforeConnect
+    BeforeCommit = FDConnectionBeforeCommit
     Left = 96
     Top = 64
   end

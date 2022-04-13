@@ -44,7 +44,7 @@ begin
   try
     try
       vQry := TFDQuery.Create(nil);
-      vQry.Connection := dmConexao.FDConnection1;
+      vQry.Connection := dmConexao.FDConnection;
       vQry.SQL.Add(' UPDATE DOWNLOAD');
       vQry.SQL.Add(' SET(');
       vQry.SQL.Add(' ID = :ID , URL = :URL, DATA_INICIO = :DATA_INICIO, DATA_FIM= :DATA_FIM, STATUS = :STATUS)');
@@ -70,7 +70,7 @@ begin
   vQry := TFDQuery.Create(nil);
   try
     try
-      vQry.Connection := dmConexao.FDConnection1;
+      vQry.Connection := dmConexao.FDConnection;
       vQry.SQL.Add(' SELECT ID, URL, DATA_INICIO, DATA_FIM, STATUS');
       vQry.SQL.Add(' FROM DOWNLOAD');
       vQry.SQL.Add(' WHERE (1=1) ');
@@ -109,7 +109,7 @@ begin
   try
     try
       vQry := TFDQuery.Create(nil);
-      vQry.Connection := dmConexao.FDConnection1;
+      vQry.Connection := dmConexao.FDConnection;
       vQry.SQL.Add(' INSERT INTO DOWNLOAD(');
       vQry.SQL.Add(' ID, URL, DATA_INICIO, DATA_FIM, STATUS)');
       vQry.SQL.Add(' VALUES(');

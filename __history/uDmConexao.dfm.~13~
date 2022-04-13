@@ -1,13 +1,15 @@
-object fd: Tfd
+object dmconexao: Tdmconexao
   OldCreateOrder = False
   Height = 252
   Width = 374
-  object FDConnection1: TFDConnection
+  object FDConnection: TFDConnection
     Params.Strings = (
       'Database=C:\desenvolvimento\teste\banco.sdb'
       'DriverID=SQLite')
     Connected = True
     LoginPrompt = False
+    AfterConnect = FDConnectionAfterConnect
+    BeforeCommit = FDConnectionBeforeCommit
     Left = 96
     Top = 64
   end
@@ -21,6 +23,19 @@ object fd: Tfd
     DestDatabase = 'C:\desenvolvimento\teste\banco.sdb'
     DestCatalog = 'MAIN'
     Left = 80
+    Top = 128
+  end
+  object fdq: TFDQuery
+    Connection = FDConnection
+    SQL.Strings = (
+      'CREATE TABLE IF NOT EXISTS download ('
+      '    id          INTEGER       PRIMARY KEY AUTOINCREMENT,'
+      '    data_inicio DATETIME,'
+      '    data_fim    DATETIME,'
+      '    url         VARCHAR (150),'
+      '    status      VARCHAR (15) '
+      ');')
+    Left = 160
     Top = 128
   end
 end

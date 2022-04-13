@@ -33,8 +33,8 @@ type
     FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink;
     FDSQLiteBackup1: TFDSQLiteBackup;
     fdq: TFDQuery;
+    procedure FDConnectionBeforeCommit(Sender: TObject);
     procedure FDConnectionAfterConnect(Sender: TObject);
-    procedure FDConnectionBeforeConnect(Sender: TObject);
   private
     { Private declarations }
   public
@@ -55,9 +55,9 @@ begin
   fdq.OpenOrExecute;
 end;
 
-procedure Tdmconexao.FDConnectionBeforeConnect(Sender: TObject);
+procedure Tdmconexao.FDConnectionBeforeCommit(Sender: TObject);
 begin
-  FDConnection.Params.Database := ExtractFilePath(Application.ExeName) + 'banco.sdb';
+  FDConnection.Params.Database := ExtractFilePath(Application.ExeName);
 end;
 
 end.

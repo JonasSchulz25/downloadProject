@@ -22,10 +22,6 @@ object FrmPrincipal: TFrmPrincipal
     Height = 178
     Align = alClient
     TabOrder = 0
-    ExplicitLeft = 232
-    ExplicitTop = 152
-    ExplicitWidth = 185
-    ExplicitHeight = 41
     object lblUrl: TLabel
       Left = 16
       Top = 13
@@ -39,6 +35,19 @@ object FrmPrincipal: TFrmPrincipal
       Font.Style = [fsBold]
       ParentFont = False
     end
+    object lblStatus: TLabel
+      Left = 16
+      Top = 83
+      Width = 105
+      Height = 17
+      Caption = 'Download Parado'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+    end
     object edtUrl: TEdit
       Left = 16
       Top = 32
@@ -48,7 +57,7 @@ object FrmPrincipal: TFrmPrincipal
     end
     object btnBaixar: TButton
       Left = 214
-      Top = 113
+      Top = 129
       Width = 75
       Height = 25
       Caption = 'Baixar'
@@ -65,15 +74,16 @@ object FrmPrincipal: TFrmPrincipal
     end
     object btnCancelar: TButton
       Left = 294
-      Top = 113
+      Top = 129
       Width = 75
       Height = 25
       Caption = 'Cancelar'
       TabOrder = 3
+      OnClick = btnCancelarClick
     end
     object btnFechar: TButton
       Left = 375
-      Top = 113
+      Top = 129
       Width = 75
       Height = 25
       Caption = 'Fechar'
@@ -82,10 +92,24 @@ object FrmPrincipal: TFrmPrincipal
     end
     object pgBaixar: TProgressBar
       Left = 16
-      Top = 82
+      Top = 106
       Width = 434
       Height = 17
       TabOrder = 5
     end
+    object btnHistorico: TButton
+      Left = 16
+      Top = 129
+      Width = 89
+      Height = 25
+      Caption = 'Exibir Historico'
+      TabOrder = 6
+      OnClick = btnHistoricoClick
+    end
+  end
+  object SaveDialog: TSaveDialog
+    DefaultExt = 'RAR'
+    Left = 432
+    Top = 56
   end
 end
