@@ -1,0 +1,26 @@
+object dmconexao: Tdmconexao
+  OldCreateOrder = False
+  Height = 252
+  Width = 374
+  object FDConnection1: TFDConnection
+    Params.Strings = (
+      'Database=C:\desenvolvimento\teste\banco.sdb'
+      'DriverID=SQLite')
+    Connected = True
+    LoginPrompt = False
+    Left = 96
+    Top = 64
+  end
+  object FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink
+    Left = 200
+    Top = 64
+  end
+  object FDSQLiteBackup1: TFDSQLiteBackup
+    Database = '\\srv\db\data.sdb'
+    Catalog = 'MAIN'
+    DestDatabase = 'C:\desenvolvimento\teste\banco.sdb'
+    DestCatalog = 'MAIN'
+    Left = 80
+    Top = 128
+  end
+end

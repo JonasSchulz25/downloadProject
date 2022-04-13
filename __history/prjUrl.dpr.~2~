@@ -1,0 +1,17 @@
+program prjUrl;
+
+uses
+  Vcl.Forms,
+  uFrmUrl in 'uFrmUrl.pas' {FrmPrincipal},
+  uTIdHTTPProgress in 'uTIdHTTPProgress.pas',
+  uDmConexao in 'uDmConexao.pas' {fd: TDataModule};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TFrmPrincipal, FrmPrincipal);
+  Application.CreateForm(Tfd, fd);
+  Application.Run;
+end.

@@ -1,0 +1,42 @@
+unit uFrmLista;
+
+interface
+
+uses
+  Winapi.Windows,
+  Winapi.Messages,
+  System.SysUtils,
+  System.Variants,
+  System.Classes,
+  Vcl.Graphics,
+  Vcl.Controls,
+  Vcl.Forms,
+  Vcl.Dialogs,
+  Data.DB,
+  Datasnap.DBClient,
+  Vcl.Grids,
+  Vcl.DBGrids;
+
+type
+  TfrmLista = class(TForm)
+    DBGrid1: TDBGrid;
+    cds: TClientDataSet;
+    ds: TDataSource;
+    cdsSTATUS: TStringField;
+    cdsURL: TStringField;
+    cdsDATA_INICIO: TDateTimeField;
+    cdsDATA_FIM: TDateTimeField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmLista: TfrmLista;
+
+implementation
+
+{$R *.dfm}
+
+end.
