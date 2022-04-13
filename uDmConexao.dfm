@@ -27,10 +27,10 @@ object dmconexao: Tdmconexao
     Connection = FDConnection
     SQL.Strings = (
       'CREATE TABLE IF NOT EXISTS download ('
-      '    id          INTEGER       PRIMARY KEY AUTOINCREMENT,'
+      '    codigo          INTEGER       PRIMARY KEY AUTOINCREMENT,'
       '    data_inicio DATETIME,'
       '    data_fim    DATETIME,'
-      '    url         VARCHAR (150),'
+      '    url         VARCHAR (600),'
       '    status      VARCHAR (15) '
       ');')
     Left = 160

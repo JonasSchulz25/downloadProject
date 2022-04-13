@@ -17,7 +17,7 @@ type
     FUrl: string;
     FDataInicio: tDatetime;
     FDataFim: tDatetime;
-    FId: integer;
+    Fcodigo: integer;
     FStatus: string;
     procedure PopularParametros(pQry: TFDQuery);
   public
@@ -25,7 +25,7 @@ type
     procedure Alterar;
     procedure Carregar(pCds: TClientDataSet);
   published
-    property id: integer read FId write FId;
+    property codigo: integer read Fcodigo write Fcodigo;
     property url: string read FUrl write FUrl;
     property data_inicio: tDatetime read FDataInicio write FDataInicio;
     property data_fim: tDatetime read FDataFim write FDataFim;
@@ -47,7 +47,7 @@ begin
       vQry.Connection := dmConexao.FDConnection;
       vQry.SQL.Add(' UPDATE DOWNLOAD');
       vQry.SQL.Add(' SET(');
-      vQry.SQL.Add(' ID = :ID , URL = :URL, DATA_INICIO = :DATA_INICIO, DATA_FIM= :DATA_FIM, STATUS = :STATUS)');
+      vQry.SQL.Add(' CODIGO = :CODIGO , URL = :URL, DATA_INICIO = :DATA_INICIO, DATA_FIM= :DATA_FIM, STATUS = :STATUS)');
 
       PopularParametros(vQry);
 
@@ -71,7 +71,7 @@ begin
   try
     try
       vQry.Connection := dmConexao.FDConnection;
-      vQry.SQL.Add(' SELECT ID, URL, DATA_INICIO, DATA_FIM, STATUS');
+      vQry.SQL.Add(' SELECT CODIGO, URL, DATA_INICIO, DATA_FIM, STATUS');
       vQry.SQL.Add(' FROM DOWNLOAD');
       vQry.SQL.Add(' WHERE (1=1) ');
 
@@ -111,9 +111,9 @@ begin
       vQry := TFDQuery.Create(nil);
       vQry.Connection := dmConexao.FDConnection;
       vQry.SQL.Add(' INSERT INTO DOWNLOAD(');
-      vQry.SQL.Add(' ID, URL, DATA_INICIO, DATA_FIM, STATUS)');
+      vQry.SQL.Add(' CODIGO, URL, DATA_INICIO, DATA_FIM, STATUS)');
       vQry.SQL.Add(' VALUES(');
-      vQry.SQL.Add(' :ID, :URL, :DATA_INICIO, :DATA_FIM, :STATUS)');
+      vQry.SQL.Add(' :CODIGO, :URL, :DATA_INICIO, :DATA_FIM, :STATUS)');
       PopularParametros(vQry);
 
       vQry.ExecSQL;
@@ -130,14 +130,14 @@ end;
 
 procedure tDownload.PopularParametros(pQry: TFDQuery);
 begin
-  if FId > 0 then
+  if Fcodigo > 0 then
   begin
-    pQry.ParamByName('ID').AsInteger := FId;
+    pQry.ParamByName('CODIGO').AsInteger := Fcodigo;
   end
   else
   begin
-    pQry.ParamByName('ID').DataType := ftInteger;
-    pQry.ParamByName('ID').Value := Variants.Null;
+    pQry.ParamByName('CODIGO').DataType := ftInteger;
+    pQry.ParamByName('CODIGO').Value := Variants.Null;
   end;
   pQry.ParamByName('DATA_INICIO').AsDateTime := FDataInicio;
   pQry.ParamByName('DATA_FIM').AsDateTime := FDataFim;
